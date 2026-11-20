@@ -1,0 +1,162 @@
+{
+  "version": 8,
+  "name": "Moravskoslezský kraj",
+  "center": [18.26, 49.82],
+  "zoom": 9,
+  "glyphs": "{pack}/glyphs/{fontstack}/{range}.pbf",
+  "sprite": "{pack}/sprites/light",
+  "sources": {
+    "basemap": {
+      "type": "vector",
+      "url": "pmtiles://{archive}"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": { "background-color": "#e8e4dc" }
+    },
+    {
+      "id": "ground",
+      "type": "fill",
+      "source": "basemap",
+      "source-layer": "earth",
+      "paint": { "fill-color": "#f3efe4" }
+    },
+    {
+      "id": "landcover",
+      "type": "fill",
+      "source": "basemap",
+      "source-layer": "landcover",
+      "paint": { "fill-color": ["match", ["get", "kind"], "forest", "#ccd9bb", "grassland", "#dce2c6", "urban_area", "#e8ddd0", "#e9e5d4"] }
+    },
+    {
+      "id": "landuse",
+      "type": "fill",
+      "source": "basemap",
+      "source-layer": "landuse",
+      "filter": ["match", ["get", "kind"], ["forest", "nature_reserve", "national_park", "park", "garden", "grass", "farmland", "residential", "industrial"], true, false],
+      "paint": { "fill-color": ["match", ["get", "kind"], ["forest", "nature_reserve", "national_park"], "#cedcbe", ["park", "garden", "grass"], "#d9e4c8", "farmland", "#ebe6cd", "industrial", "#e7ded9", "#eae1d5"] }
+    },
+    {
+      "id": "water-fill",
+      "type": "fill",
+      "source": "basemap",
+      "source-layer": "water",
+      "filter": ["==", ["geometry-type"], "Polygon"],
+      "paint": { "fill-color": "#afceda" }
+    },
+    {
+      "id": "waterways",
+      "type": "line",
+      "source": "basemap",
+      "source-layer": "water",
+      "filter": ["==", ["geometry-type"], "LineString"],
+      "paint": { "line-color": "#8ab5c8", "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0.4, 15, 2] }
+    },
+    {
+      "id": "boundaries",
+      "type": "line",
+      "source": "basemap",
+      "source-layer": "boundaries",
+      "filter": ["match", ["get", "kind"], ["country", "region"], true, false],
+      "paint": { "line-color": "#a2949d", "line-width": 0.8, "line-dasharray": [3, 2] }
+    },
+    {
+      "id": "buildings",
+      "type": "fill",
+      "source": "basemap",
+      "source-layer": "buildings",
+      "minzoom": 13,
+      "paint": { "fill-color": "#cdbdad", "fill-outline-color": "#b9a896" }
+    },
+    {
+      "id": "rail",
+      "type": "line",
+      "source": "basemap",
+      "source-layer": "roads",
+      "minzoom": 11,
+      "filter": ["==", ["get", "kind"], "rail"],
+      "paint": { "line-color": "#8f9290", "line-width": 0.6, "line-dasharray": [4, 2] }
+    },
+    {
+      "id": "road-casings",
+      "type": "line",
+      "source": "basemap",
+      "source-layer": "roads",
+      "filter": ["match", ["get", "kind"], ["highway", "major_road", "minor_road"], true, false],
+      "layout": { "line-cap": "round", "line-join": "round" },
+      "paint": { "line-color": "#ccb9a0", "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.8, 12, 2.4, 15, 6.5] }
+    },
+    {
+      "id": "roads",
+      "type": "line",
+      "source": "basemap",
+      "source-layer": "roads",
+      "filter": ["match", ["get", "kind"], ["highway", "major_road", "minor_road"], true, false],
+      "layout": { "line-cap": "round", "line-join": "round" },
+      "paint": {
+        "line-color": ["match", ["get", "kind"], "highway", "#f5cf90", "major_road", "#fff1d0", "#fffdfa"],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.6, 12, 1.8, 15, 5.4]
+      }
+    },
+    {
+      "id": "paths",
+      "type": "line",
+      "source": "basemap",
+      "source-layer": "roads",
+      "minzoom": 11,
+      "filter": ["==", ["get", "kind"], "path"],
+      "paint": { "line-color": "#897957", "line-width": ["interpolate", ["linear"], ["zoom"], 11, 0.4, 15, 1.3], "line-dasharray": [2, 2] }
+    },
+    {
+      "id": "street-names",
+      "type": "symbol",
+      "source": "basemap",
+      "source-layer": "roads",
+      "minzoom": 13,
+      "filter": ["match", ["get", "kind"], ["highway", "major_road", "minor_road", "path"], true, false],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": ["coalesce", ["get", "name:cs"], ["get", "name"], ""],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 10
+      },
+      "paint": { "text-color": "#54483e", "text-halo-color": "#fffaf0", "text-halo-width": 1.2 }
+    },
+    {
+      "id": "outdoor-landmarks",
+      "type": "symbol",
+      "source": "basemap",
+      "source-layer": "pois",
+      "minzoom": 11,
+      "filter": ["match", ["get", "kind"], ["peak", "park", "drinking_water"], true, false],
+      "layout": {
+        "icon-image": ["get", "kind"],
+        "icon-size": 0.9,
+        "text-field": ["coalesce", ["get", "name:cs"], ["get", "name"], ""],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 10,
+        "text-anchor": "top",
+        "text-offset": [0, 0.9],
+        "text-optional": true
+      },
+      "paint": { "text-color": "#465c3f", "text-halo-color": "#f7f5e9", "text-halo-width": 1.3 }
+    },
+    {
+      "id": "settlement-names",
+      "type": "symbol",
+      "source": "basemap",
+      "source-layer": "places",
+      "filter": ["match", ["get", "kind"], ["locality", "neighbourhood", "macroregion", "region"], true, false],
+      "layout": {
+        "symbol-sort-key": ["coalesce", ["get", "sort_rank"], 999],
+        "text-field": ["coalesce", ["get", "name:cs"], ["get", "name"], ""],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 6, 11, 12, 14, 15, 16]
+      },
+      "paint": { "text-color": "#2f3c35", "text-halo-color": "#fffaf0", "text-halo-width": 1.5 }
+    }
+  ]
+}

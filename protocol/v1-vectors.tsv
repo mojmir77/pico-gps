@@ -1,0 +1,5 @@
+name	hex	identity	decoded	comment
+metadata	01efcdab89674523011032547698badcfe	0123456789abcdef	fedcba9876543210	version 1, both ID byte orders
+fix	2a000060cc698ef2b11d32b8e20a4601ee000f09	42	1775001600,498201230,182630450,326,238,9	all valid fields in Ostrava
+no_fix	2b000160cc690000000000000000000000000200	43	1775001601,-,-,-,-,0	valid UTC without a position
+south_fix	2c000260cc69a094d0eb48b5205a0000e8ff0bff	44	1775001602,-338652000,1512093000,-,-24,-	signed position and altitude, unknown speed and satellites
